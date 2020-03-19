@@ -1,0 +1,31 @@
+{% extends "register/base.html" %}
+
+{% load crispy_forms_tags %}
+
+{#{% block page_script %}#}
+{#    {% if messages %}#}
+{#            {% for message in messages %}#}
+{#                alert(message);#}
+{#            {% endfor %}#}
+{#    {% endif %}#}
+{#{% endblock %}#}
+
+
+
+{% block page_title %}
+    Register
+{% endblock %}
+
+
+{% block page_head %}
+    Register Here
+{% endblock %}
+
+
+{% block content %}
+    <form method="post" action="#">
+        {% csrf_token %}
+        {{ form|crispy }}
+        <button type="submit">Register</button>
+    </form>
+{%  endblock %}

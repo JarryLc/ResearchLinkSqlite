@@ -1,0 +1,36 @@
+{% extends "register/base.html" %}
+
+{% load crispy_forms_tags %}
+
+{#{% block page_script %}#}
+{#    {% if messages %}#}
+{#            {% for message in messages %}#}
+{#                alert(message);#}
+{#            {% endfor %}#}
+{#    {% endif %}#}
+{#{% endblock %}#}
+
+{% block page_title %}
+    Research Link
+{% endblock %}
+
+
+{% block page_head %}
+    Welcome to Research Link!
+{% endblock %}
+
+
+{% block content %}
+    {% if user.is_authenticated %}
+        <p>{{ msg }}</p>
+    {% else %}
+        <p>{{ msg }}</p>
+        <p>Log in <a href="/login/">here</a> or create an account <a href="/register/">here</a>.</p>
+    {% endif %}
+
+{#    <form method="post" action="#">#}
+{#        {% csrf_token %}#}
+{#        {{ form|crispy }}#}
+{#        <button type="submit">Register</button>#}
+{#    </form>#}
+{%  endblock %}

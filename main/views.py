@@ -6,9 +6,15 @@ from register.models import Identity
 
 # Create your views here.
 def home(request):
-
     if not request.user.is_anonymous:
-        identity = Identity.objects.get(user=request.user).identity
-        return HttpResponse("Welcome! " + str(request.user) + " as a " + identity)
+        if request.user.is_superuser:
+            identity = "superuser"
+        else:
+            identity = Identity.objects.get(user=request.user).identity
+        msg = "Hello, " + str(request.user) + ". You are currently logged in as a " + identity + "."
+        # return HttpResponse("Welcome! " + str(request.user) + " as a " + identity)
+        return render(request, 'main/home.html', {'msg': msg})
     else:
-        return HttpResponse("Welcome! " + str(request.user))
+        msg = "You are not logged in currently."
+        return render(request, 'main/home.html', {'msg': msg})
+        # return HttpResponse("Welcome! " + str(request.user))

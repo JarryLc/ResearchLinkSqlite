@@ -5,7 +5,7 @@ from register.models import Identity
 from .models import StudentProfile
 from .models import ProfessorProfile
 from django.contrib.auth.models import User
-from .forms import StudentProfileForm, ProfessorProfileForm
+from .forms import StudentProfileForm, ProfessorProfileForm, SearchForm
 
 
 # Create your views here.
@@ -17,7 +17,7 @@ def home(request):
             identity = Identity.objects.get(user=request.user).identity
         msg = "Hello, " + str(request.user) + ". You are currently logged in as a " + identity + "."
         # return HttpResponse("Welcome! " + str(request.user) + " as a " + identity)
-        return render(request, 'main/home.html', {'msg': msg})
+        return render(request, 'main/home.html', {'msg': msg, 'identity': identity})
     else:
         msg = "You are not logged in currently."
         return render(request, 'main/home.html', {'msg': msg})
@@ -40,9 +40,13 @@ def profile(request):
             return redirect('/profile/create/')
         else:
             if identity == "student":
-                return render(request, 'main/profile.html', {'netid': studentProfile.netid, 'name': studentProfile.name, 'gpa': studentProfile.gpa, 'department': studentProfile.department})
+                return render(request, 'main/profile.html',
+                              {'identity': identity, 'netid': studentProfile.netid, 'name': studentProfile.name,
+                               'gpa': studentProfile.gpa, 'department': studentProfile.department})
             else:
-                return render(request, 'main/profile.html', {'netid': professorProfile.netid, 'name': professorProfile.name, 'gpa': "N/A", 'department': professorProfile.department})
+                return render(request, 'main/profile.html',
+                              {'identity': identity, 'netid': professorProfile.netid, 'name': professorProfile.name,
+                               'department': professorProfile.department})
 
 
 def createProfile(request):
@@ -64,7 +68,7 @@ def createProfile(request):
                 s.save()
                 return HttpResponseRedirect('/profile/')
             else:
-                return render(request, 'main/createProfile.html', {'form': filledProfileForm})
+                return render(request, 'main/createProfile.html', {'form': filledProfileForm, 'identity': identity})
         else:
             filledProfileForm = ProfessorProfileForm(request.POST)
             if filledProfileForm.is_valid():
@@ -76,15 +80,14 @@ def createProfile(request):
                 p.save()
                 return HttpResponseRedirect('/profile/')
             else:
-                return render(request, 'main/createProfile.html', {'form': filledProfileForm})
-
+                return render(request, 'main/createProfile.html', {'form': filledProfileForm, 'identity': identity})
 
     if identity == "student":
         form = StudentProfileForm()
     else:
         form = ProfessorProfileForm()
     msg = "You haven't created a profile yet. Why don't you create it now!"
-    return render(request, 'main/createProfile.html', {'form': form, 'msg': msg})
+    return render(request, 'main/createProfile.html', {'form': form, 'msg': msg, 'identity': identity})
 
 
 def modifyProfile(request):
@@ -106,7 +109,7 @@ def modifyProfile(request):
                 s.save()
                 return HttpResponseRedirect('/profile/')
             else:
-                return render(request, 'main/modifyProfile.html', {'form': filledProfileForm})
+                return render(request, 'main/modifyProfile.html', {'form': filledProfileForm, 'identity': identity})
         else:
             filledProfileForm = ProfessorProfileForm(request.POST)
             if filledProfileForm.is_valid():
@@ -118,14 +121,40 @@ def modifyProfile(request):
                 p.save()
                 return HttpResponseRedirect('/profile/')
             else:
-                return render(request, 'main/modifyProfile.html', {'form': filledProfileForm})
-
+                return render(request, 'main/modifyProfile.html', {'form': filledProfileForm, 'identity': identity})
 
     if identity == "student":
         form = StudentProfileForm()
     else:
         form = ProfessorProfileForm()
-    return render(request, 'main/modifyProfile.html', {'form': form})
+    return render(request, 'main/modifyProfile.html', {'form': form, 'identity': identity})
 
 
+def search(request):
+    if request.user.is_anonymous or request.user.is_superuser:
+        return render(request, 'main/search.html')
 
+    identity = Identity.objects.get(user=request.user).identity
+    if identity == 'student':
+        return render(request, 'main/search.html', {'identity': identity})
+    else:
+        form = SearchForm()
+        if request.method == 'GET':
+            studentProfiles = StudentProfile.objects.all()
+            nameContain = request.GET.get('nameContain')
+            departmentIs = request.GET.get('departmentIs')
+            maxGPA = request.GET.get('maxGPA')
+            minGPA = request.GET.get('minGPA')
+            if nameContain != '' and nameContain is not None:
+                studentProfiles = studentProfiles.filter(name__icontains=nameContain)
+            if departmentIs != '' and departmentIs is not None:
+                studentProfiles = studentProfiles.filter(department__exact=departmentIs)
+            if maxGPA != '' and maxGPA is not None:
+                studentProfiles = studentProfiles.filter(gpa__lte=maxGPA)
+            if minGPA != '' and minGPA is not None:
+                studentProfiles = studentProfiles.filter(gpa__gte=minGPA)
+
+
+            return render(request, 'main/search.html', {'identity': identity, 'form': form, 'results': studentProfiles})
+        else:
+            return render(request, 'main/search.html', {'identity': identity, 'form': form})

@@ -11,12 +11,12 @@
 {#{% endblock %}#}
 
 {% block page_title %}
-    Profile
+    Search
 {% endblock %}
 
 
 {% block page_head %}
-    My Profile
+    Advanced Search
 {% endblock %}
 
 
@@ -27,16 +27,31 @@
     {% elif user.is_superuser %}
         <p>You are logged in as a superuser.</p>
         <p>Log out <a href="/logout/">here</a>.</p>
+    {% elif identity == 'student' %}
+        <p>Only professors can perform advanced search.</p>
     {% else %}
-        <p>NetId: {{ netid }}</p>
-        <p>Name: {{ name }}</p>
-        {% if identity == 'student' %}
-            <p>GPA: {{ gpa }}</p>
-        {% endif %}
-        <p>Department: {{ department }}</p>
-        <form action="modify/" method="get">
-            <button type="submit">Modify</button>
+        <form method="get" action="#">
+        {% csrf_token %}
+        {{ form|crispy }}
+        <button type="submit">Search</button>
         </form>
+        <hr />
+        <div class="row">
+            <ul>
+                {% for profile in results %}
+                    <li>
+                        <span>NetId: {{ profile.netid }}</span>
+                        <span>Name: {{ profile.name }}</span>
+                        <span>GPA: {{ profile.gpa }}</span>
+                        <span>Department: {{ profile.department }}</span>
+                    </li>
+                    <hr />
+                {% endfor %}
+            </ul>
+        </div>
+
+
+
     {% endif %}
 
 {#    <form method="post" action="#">#}

@@ -15,6 +15,9 @@
         <a href="/">Home</a>
         {% if user.is_authenticated %}
             <a href="/profile/">Profile</a>
+            {% if identity == 'professor' %}
+                <a href="/search/">Search</a>
+            {% endif %}
             <a href="/logout/">Logout</a>
         {% endif %}
     </div>

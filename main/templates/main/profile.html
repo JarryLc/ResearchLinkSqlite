@@ -1,0 +1,45 @@
+{% extends "register/base.html" %}
+
+{% load crispy_forms_tags %}
+
+{#{% block page_script %}#}
+{#    {% if messages %}#}
+{#            {% for message in messages %}#}
+{#                alert(message);#}
+{#            {% endfor %}#}
+{#    {% endif %}#}
+{#{% endblock %}#}
+
+{% block page_title %}
+    Profile
+{% endblock %}
+
+
+{% block page_head %}
+    My Profile
+{% endblock %}
+
+
+{% block content %}
+    {% if not user.is_authenticated %}
+        <p>You are not logged in currently.</p>
+        <p>Log in <a href="/login/">here</a> or create an account <a href="/register/">here</a>.</p>
+    {% elif user.is_superuser %}
+        <p>You are logged in as a superuser.</p>
+        <p>Log out <a href="/logout/">here</a>.</p>
+    {% else %}
+        <p>NetId: {{ netid }}</p>
+        <p>Name: {{ name }}</p>
+        <p>GPA: {{ gpa }}</p>
+        <p>Department: {{ department }}</p>
+        <form action="modify/" method="get">
+            <button type="submit">Modify</button>
+        </form>
+    {% endif %}
+
+{#    <form method="post" action="#">#}
+{#        {% csrf_token %}#}
+{#        {{ form|crispy }}#}
+{#        <button type="submit">Register</button>#}
+{#    </form>#}
+{%  endblock %}

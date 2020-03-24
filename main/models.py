@@ -11,7 +11,7 @@ class StudentProfile(models.Model):
     name = models.CharField(max_length=50)
     gpa = models.DecimalField(max_digits=3, decimal_places=2)
     department = models.CharField(max_length=50)
-
+    interest = models.CharField(max_length=50)
 
 class ProfessorProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)

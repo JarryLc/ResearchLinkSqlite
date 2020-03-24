@@ -42,7 +42,7 @@ def profile(request):
             if identity == "student":
                 return render(request, 'main/profile.html',
                               {'identity': identity, 'netid': studentProfile.netid, 'name': studentProfile.name,
-                               'gpa': studentProfile.gpa, 'department': studentProfile.department})
+                               'gpa': studentProfile.gpa, 'department': studentProfile.department, 'interest': studentProfile.interest})
             else:
                 return render(request, 'main/profile.html',
                               {'identity': identity, 'netid': professorProfile.netid, 'name': professorProfile.name,
@@ -63,8 +63,9 @@ def createProfile(request):
                 name = filledProfileForm.cleaned_data.get('name')
                 gpa = filledProfileForm.cleaned_data.get('gpa')
                 department = filledProfileForm.cleaned_data.get('department')
+                interest = filledProfileForm.cleaned_data.get('interest')
                 userInstance = User.objects.get(username=request.user.username)
-                s = StudentProfile(user=userInstance, netid=netid, name=name, gpa=gpa, department=department)
+                s = StudentProfile(user=userInstance, netid=netid, name=name, gpa=gpa, department=department, interest=interest)
                 s.save()
                 return HttpResponseRedirect('/profile/')
             else:
@@ -106,6 +107,7 @@ def modifyProfile(request):
                 s.name = filledProfileForm.cleaned_data.get('name')
                 s.gpa = filledProfileForm.cleaned_data.get('gpa')
                 s.department = filledProfileForm.cleaned_data.get('department')
+                s.interest = filledProfileForm.cleaned_data.get('interest')
                 s.save()
                 return HttpResponseRedirect('/profile/')
             else:

@@ -5,7 +5,8 @@ from django.contrib.auth.models import User
 
 
 class RegisterForm(UserCreationForm):
-    email = forms.EmailField(help_text='Please use your educational email account.')
+    username = forms.CharField(label="NetId", help_text='Please enter your Illinois NetId.', max_length=20)
+    email = forms.EmailField()
     choices = [
         ('student', 'I am a student.'),
         ('professor', 'I am a professor.'),

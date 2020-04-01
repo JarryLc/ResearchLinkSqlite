@@ -54,6 +54,7 @@ def createProfile(request):
         return render(request, 'main/createProfile.html')
 
     identity = Identity.objects.get(user=request.user).identity
+    netid = Identity.objects.get(user=request.user).netid
 
     if request.method == 'POST':
         if identity == "student":
@@ -83,9 +84,9 @@ def createProfile(request):
                 return render(request, 'main/createProfile.html', {'form': filledProfileForm, 'identity': identity})
 
     if identity == "student":
-        form = StudentProfileForm()
+        form = StudentProfileForm(initial={'netid': netid})
     else:
-        form = ProfessorProfileForm()
+        form = ProfessorProfileForm(initial={'netid': netid})
     msg = "You haven't created a profile yet. Why don't you create it now!"
     return render(request, 'main/createProfile.html', {'form': form, 'msg': msg, 'identity': identity})
 
@@ -95,14 +96,13 @@ def modifyProfile(request):
         return render(request, 'main/modifyProfile.html')
 
     identity = Identity.objects.get(user=request.user).identity
+    netid = Identity.objects.get(user=request.user).netid
 
     if request.method == 'POST':
         if identity == "student":
             filledProfileForm = StudentProfileForm(request.POST)
             if filledProfileForm.is_valid():
-                userInstance = User.objects.get(username=request.user.username)
-                s = StudentProfile.objects.get(user=userInstance)
-                s.netid = filledProfileForm.cleaned_data.get('netid')
+                s = StudentProfile.objects.get(user=request.user)
                 s.name = filledProfileForm.cleaned_data.get('name')
                 s.gpa = filledProfileForm.cleaned_data.get('gpa')
                 s.department = filledProfileForm.cleaned_data.get('department')
@@ -113,9 +113,8 @@ def modifyProfile(request):
         else:
             filledProfileForm = ProfessorProfileForm(request.POST)
             if filledProfileForm.is_valid():
-                userInstance = User.objects.get(username=request.user.username)
-                p = ProfessorProfile.objects.get(user=userInstance)
-                p.netid = filledProfileForm.cleaned_data.get('netid')
+                # userInstance = User.objects.get(username=request.user.username)
+                p = ProfessorProfile.objects.get(user=request.user)
                 p.name = filledProfileForm.cleaned_data.get('name')
                 p.department = filledProfileForm.cleaned_data.get('department')
                 p.save()
@@ -124,10 +123,27 @@ def modifyProfile(request):
                 return render(request, 'main/modifyProfile.html', {'form': filledProfileForm, 'identity': identity})
 
     if identity == "student":
-        form = StudentProfileForm()
+        s = StudentProfile.objects.get(user=request.user)
+        form = StudentProfileForm(initial={'netid': netid, 'name': s.name, 'gpa': s.gpa, 'department': s.department})
     else:
-        form = ProfessorProfileForm()
+        p = ProfessorProfile.objects.get(user=request.user)
+        form = ProfessorProfileForm(initial={'netid': netid, 'name': p.name, 'department': p.department})
     return render(request, 'main/modifyProfile.html', {'form': form, 'identity': identity})
+
+
+def deleteProfile(request):
+    if request.user.is_anonymous or request.user.is_superuser:
+        return render(request, 'main/createProfile.html')
+
+    identity = Identity.objects.get(user=request.user).identity
+    if identity == "student":
+        StudentProfile.objects.filter(user=request.user).delete()
+    else:
+        ProfessorProfile.objects.filter(user=request.user).delete()
+
+    return redirect('/profile/')
+
+
 
 
 def search(request):
@@ -154,7 +170,9 @@ def search(request):
             if minGPA != '' and minGPA is not None:
                 studentProfiles = studentProfiles.filter(gpa__gte=minGPA)
 
-
+            form = SearchForm(initial={'nameContain': nameContain, 'departmentIs': departmentIs, 'maxGPA': maxGPA,
+                                       'minGPA': minGPA})
             return render(request, 'main/search.html', {'identity': identity, 'form': form, 'results': studentProfiles})
+
         else:
             return render(request, 'main/search.html', {'identity': identity, 'form': form})

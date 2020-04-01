@@ -15,9 +15,11 @@ def register(request):
         if filledRegisterForm.is_valid():
             filledRegisterForm.save()
             identity = filledRegisterForm.cleaned_data.get('identity')
+            # username = filledRegisterForm.cleaned_data.get('username')
             username = filledRegisterForm.cleaned_data.get('username')
             userInstance = User.objects.get(username=username)
-            i = Identity(user=userInstance, identity=str(identity))
+            netid = username
+            i = Identity(user=userInstance, identity=str(identity), netid=netid)
             i.save()
             return HttpResponseRedirect('/login/')
         else:

@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 
 import os
 import django_heroku
+import mongoengine
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -41,8 +42,18 @@ INSTALLED_APPS = [
     'register.apps.RegisterConfig',
     'main.apps.MainConfig',
     'crispy_forms',
+    'django_mongoengine'
 ]
+MONGODB_DATABASES= {
+    "default": {
+        "name": 'matchdb',
+        "host":'localhost',
+        "password":'',
+        "username": '',
+        "tz_aware": True 
+    }
 
+}
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',

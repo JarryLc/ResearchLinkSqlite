@@ -1,14 +1,11 @@
 {% extends "register/base.html" %}
+{% load static %}
 
 {% load crispy_forms_tags %}
 
-{#{% block page_script %}#}
-{#    {% if messages %}#}
-{#            {% for message in messages %}#}
-{#                alert(message);#}
-{#            {% endfor %}#}
-{#    {% endif %}#}
-{#{% endblock %}#}
+{% block script %}
+    <script src="{% static 'register/js.js' %}"></script>
+{% endblock %}
 
 {% block page_title %}
     Search
@@ -30,14 +27,14 @@
     {% elif identity == 'student' %}
         <p>Only professors can perform advanced search.</p>
     {% else %}
-        <form method="get" action="#">
+        <form method="get" action="#" id="ajax_search-form">
         {% csrf_token %}
         {{ form|crispy }}
-        <button type="submit">Search</button>
+        <button type="submit" id="ajax_search_btn">Search</button>
         </form>
         <hr />
         <div class="row">
-            <ul>
+            <ul id="display-result">
                 {% for profile in results %}
                     <li>
                         <span>NetId: {{ profile.netid }}</span>

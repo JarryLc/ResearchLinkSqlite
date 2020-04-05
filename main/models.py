@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from mongoengine import Document, EmbeddedDocument, fields, DynamicDocument
 
 
 # Create your models here.
@@ -18,3 +19,13 @@ class ProfessorProfile(models.Model):
     netid = models.CharField(max_length=20, primary_key=True)
     name = models.CharField(max_length=50)
     department = models.CharField(max_length=50)
+
+
+class StudentTags(DynamicDocument):
+    netid = fields.StringField(max_length=20)
+    tags = fields.ListField(max_length=100)
+
+
+class ProfessorTags(DynamicDocument):
+    netid = fields.StringField(max_length=20)
+    tags = fields.ListField(max_length=100)

@@ -1,6 +1,9 @@
+dnspython
 django
 gunicorn
 django-heroku
 django-crispy-forms
 dj-database-url
 whitenoise
+mongoengine
+django_mongoengine

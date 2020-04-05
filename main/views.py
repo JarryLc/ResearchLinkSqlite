@@ -2,12 +2,12 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 from django.http import Http404
 from register.models import Identity
-from .models import StudentProfile
-from .models import ProfessorProfile
+from .models import StudentProfile, ProfessorProfile, StudentTags, ProfessorTags
 from django.contrib.auth.models import User
 from .forms import StudentProfileForm, ProfessorProfileForm, SearchForm
 from django.http import JsonResponse
 from django.forms.models import model_to_dict
+from mongoengine import *
 
 
 # Create your views here.
@@ -19,6 +19,11 @@ def home(request):
             identity = Identity.objects.get(user=request.user).identity
         msg = "Hello, " + str(request.user) + ". You are currently logged in as a " + identity + "."
         # return HttpResponse("Welcome! " + str(request.user) + " as a " + identity)
+        sTags = StudentTags(netid='cailiu2', tags=['CV', 'AI'])
+        sTags.save()
+        pTags = ProfessorTags(netid='abdu', tags=['CV', 'AI'])
+        pTags.save()
+        print(1)
         return render(request, 'main/home.html', {'msg': msg, 'identity': identity})
     else:
         msg = "You are not logged in currently."

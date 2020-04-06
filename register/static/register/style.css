@@ -1,3 +1,4 @@
+@charset "UTF-8";
 .sidenav {
     height: 100%;
     width: 130px;
@@ -22,7 +23,19 @@
 }
 .main{
     margin-left: 160px;
-    padding: 0px 10px;
+    padding: 0px 150px;
+
+}
+/* body {
+  background: url("bck.jpg");
+} */
+
+html {
+  background: url(back.jpg) no-repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
 }
 
 ul {

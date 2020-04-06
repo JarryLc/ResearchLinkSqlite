@@ -143,8 +143,8 @@ def deleteProfile(request):
 
     return redirect('/profile/')
 
-
-
+def about(request):
+    return render(request, 'main/about.html')
 
 def search(request):
     if request.user.is_anonymous or request.user.is_superuser:

@@ -29,3 +29,8 @@ class StudentTags(DynamicDocument):
 class ProfessorTags(DynamicDocument):
     netid = fields.StringField(max_length=20)
     tags = fields.ListField(max_length=100)
+
+
+class Matches(DynamicDocument):
+    netid = fields.StringField(max_length=20)  # Professor's NetId
+    candidate = fields.ListField(max_length=100)  # List of candidate's NetId

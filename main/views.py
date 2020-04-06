@@ -23,7 +23,7 @@ def home(request):
         sTags.save()
         pTags = ProfessorTags(netid='abdu', tags=['CV', 'AI'])
         pTags.save()
-        print(1)
+        # print(1)
         return render(request, 'main/home.html', {'msg': msg, 'identity': identity})
     else:
         msg = "You are not logged in currently."

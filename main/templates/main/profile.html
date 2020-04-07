@@ -34,12 +34,15 @@
             <p>GPA: {{ gpa }}</p>
         {% endif %}
         <p>Department: {{ department }}</p>
+        <div style="display: flex;">
         <form action="modify/" method="get">
-            <button type="submit">Modify</button>
+            <button type="submit" class = "bttn" >Modify</button>
         </form>
         <form action="delete/" method="get">
-            <button type="submit">Delete</button>
+            <button type="submit" class = "bttn" >Delete</button>
         </form>
+      </div>
+
     {% endif %}
 
 {#    <form method="post" action="#">#}

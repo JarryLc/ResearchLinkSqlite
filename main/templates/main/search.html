@@ -23,7 +23,7 @@
 {% block content %}
     {% if not user.is_authenticated %}
         <p>You are not logged in currently.</p>
-        <p>Log in <a href="/login/">here</a> or create an account <a href="/register/">here</a>.</p>
+        <p> <a href="/login/" class = "bttn">Log In</a> <a href="/register/" class = "bttn">Create Account</a></p>
     {% elif user.is_superuser %}
         <p>You are logged in as a superuser.</p>
         <p>Log out <a href="/logout/">here</a>.</p>

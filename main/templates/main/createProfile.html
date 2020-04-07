@@ -32,7 +32,7 @@
         <form method="post" action="#">
         {% csrf_token %}
         {{ form|crispy }}
-        <button type="submit">Create profile now!</button>
+        <button type="submit" class = "bttn">Create profile now!</button>
         </form>
     {% endif %}
 

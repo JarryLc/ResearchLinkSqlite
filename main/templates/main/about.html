@@ -20,5 +20,42 @@
 {% endblock %}
 
 {% block content %}
-<p> still working </p>
+<style>
+.btn {
+  background-color: #e7e7e7; color: black;
+  border: none;
+  color: black;
+  padding: 10px 25px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+}
+
+</style>
+<section class="about-area section-gap">
+		<div class="container">
+			<div class="row align-items-center justify-content-center">
+				<!-- <div class="col-lg-5 col-md-6 about-left">
+					<img src="/static/register/work.jpg" alt="">
+				</div> -->
+        <picture class = "col-lg-5 col-md-15 about-left">
+          <source srcset="i/static/register/work.jpg" media="(max-width: 40px)">
+              <img src="/static/register/work.jpg" alt="" width="300" height="145" align="left">
+            </picture>
+				<div class="offset-lg-1 col-lg-6 offset-md-0 col-md-12 about-right">
+					<h1>
+						 Broaden Horizons
+					</h1>
+						<p>
+							We are a team of Engineers creating a platform to better connect our fellow peers with research opportunities
+              and foster closer relations with our Professors on campus.
+						</p>
+					<a href="/profile/create" class="btn">Learn More and Create an Account!</a>
+				</div>
+			</div>
+		</div>
+	</section>
 {%  endblock %}

@@ -12,14 +12,17 @@
 </head>
 <body>
     <div class="sidenav">
-        <a href="/">Home</a>
-        {% if user.is_authenticated %}
-            <a href="/profile/">Profile</a>
+        <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/about/">About</a></li>
+            {% if user.is_authenticated %}
+            <li><a href="/profile/">Profile</a></li>
             {% if identity == 'professor' %}
-                <a href="/search/">Search</a>
+            <li><a href="/search/">Search</a></li>
             {% endif %}
-            <a href="/logout/">Logout</a>
-        {% endif %}
+            <li><a href="/logout/">Logout</a></li>
+            {% endif %}
+        </ul>
     </div>
     <div class="main">
         <div class="row justify-content-center">

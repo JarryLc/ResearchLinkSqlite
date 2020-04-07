@@ -1,4 +1,4 @@
-.sidenav {
+/* .sidenav {
     height: 100%;
     width: 130px;
     position: fixed;
@@ -19,12 +19,37 @@
 }
 .sidenav a:hover{
     color: #f1f1f1;
-}
+} */
+
 .main{
     margin-left: 160px;
     padding: 0px 10px;
 }
 
-ul {
-   list-style-type: none;
+.sidenav {
+    background-color: #333;
 }
+
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+  }
+  
+  li {
+    float: left;
+  }
+  
+  li a {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+  }
+  
+  /* Change the link color to #111 (black) on hover */
+  li a:hover {
+    background-color: #111;
+  }

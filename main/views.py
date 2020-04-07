@@ -209,3 +209,6 @@ def search(request):
 
         else:
             return render(request, 'main/search.html', {'identity': identity, 'form': form})
+
+def about(request):
+    return render(request, 'main/about.html')

@@ -19,10 +19,12 @@ def home(request):
             identity = Identity.objects.get(user=request.user).identity
         msg = "Hello, " + str(request.user) + ". You are currently logged in as a " + identity + "."
         # return HttpResponse("Welcome! " + str(request.user) + " as a " + identity)
-        sTags = StudentTags(netid='cailiu2', tags=['CV', 'AI'])
-        sTags.save()
-        pTags = ProfessorTags(netid='abdu', tags=['CV', 'AI'])
-        pTags.save()
+        # sTags = StudentTags(netid='cailiu2', tags=['CV', 'AI'])
+        # sTags.save()
+        # sTags = StudentTags(netid='tianchi3', tags=['ML', 'AI'])
+        # sTags.save()
+        # pTags = ProfessorTags(netid='abdu', tags=['CV', 'AI'])
+        # pTags.save()
         # print(1)
         return render(request, 'main/home.html', {'msg': msg, 'identity': identity})
     else:

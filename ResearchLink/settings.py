@@ -43,6 +43,9 @@ INSTALLED_APPS = [
     'main.apps.MainConfig',
     'crispy_forms',
     "mongoengine",
+    "rest_framework",
+    'rest_framework_mongoengine',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
@@ -53,6 +56,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
 ]
 
 ROOT_URLCONF = 'ResearchLink.urls'
@@ -135,3 +139,15 @@ LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
 # Activate Django-Heroku.
 django_heroku.settings(locals())
+
+
+REST_FRAMEWORK = {
+    # Use Django's standard `django.contrib.auth` permissions,
+    # or allow read-only access for unauthenticated users.
+    'DEFAULT_PERMISSION_CLASSES': [
+        # 'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+        'rest_framework.permissions.AllowAny'
+    ]
+}
+
+CORS_ORIGIN_ALLOW_ALL = True

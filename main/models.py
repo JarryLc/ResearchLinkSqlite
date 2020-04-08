@@ -21,16 +21,16 @@ class ProfessorProfile(models.Model):
     department = models.CharField(max_length=50)
 
 
-class StudentTags(DynamicDocument):
+class StudentTags(Document):
     netid = fields.StringField(max_length=20)
     tags = fields.ListField(max_length=100)
 
 
-class ProfessorTags(DynamicDocument):
+class ProfessorTags(Document):
     netid = fields.StringField(max_length=20)
     tags = fields.ListField(max_length=100)
 
 
-class Matches(DynamicDocument):
+class Matches(Document):
     netid = fields.StringField(max_length=20)  # Professor's NetId
     candidate = fields.ListField(max_length=100)  # List of candidate's NetId

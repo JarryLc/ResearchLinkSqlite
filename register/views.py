@@ -27,3 +27,7 @@ def register(request):
     else:
         registerForm = RegisterForm()
         return render(request, 'register/register.html', {'form': registerForm})
+
+
+def react(request):
+    return render(request, 'register/index.html')

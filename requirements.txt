@@ -7,3 +7,7 @@ dj-database-url
 whitenoise
 mongoengine
 django_mongoengine
+djangorestframework
+django-rest-framework-mongoengine
+django-filter
+markdown

@@ -6,10 +6,34 @@ from .models import StudentProfile
 from .models import ProfessorProfile
 from django.contrib.auth.models import User
 from .forms import StudentProfileForm, ProfessorProfileForm, SearchForm
-
-
+from newsapi import NewsApiClient
+import random
+from random import shuffle
 # Create your views here.
 def home(request):
+    newsapi = NewsApiClient(api_key="463f3a16242547968dbe75909735ddf4")
+    topheadlines = newsapi.get_top_headlines(category='technology', language= 'en', country = 'us')
+    sources = newsapi.get_sources()
+    mySrc = sources['sources']
+
+
+    articles = topheadlines['articles']
+    desc = []
+    news = []
+    img = []
+    href = []
+    tit = []
+    for i in range(len(articles)):
+        myarticles = articles[i]
+        srcIter = mySrc[i]
+        news.append(myarticles['title'])
+        desc.append(myarticles['description'])
+        img.append(myarticles['urlToImage'])
+        href.append(myarticles['url'])
+        tit.append(srcIter['name'])
+        seed = random.randint(2,len(articles)-3)
+    mylist = zip(news, desc, img, href)
+
     if not request.user.is_anonymous:
         if request.user.is_superuser:
             identity = "superuser"
@@ -17,7 +41,10 @@ def home(request):
             identity = Identity.objects.get(user=request.user).identity
         msg = "Hello, " + str(request.user) + ". You are currently logged in as a " + identity + "."
         # return HttpResponse("Welcome! " + str(request.user) + " as a " + identity)
-        return render(request, 'main/home.html', {'msg': msg, 'identity': identity})
+        return render(request, 'main/home.html', {'msg': msg, 'identity': identity, 'n1':tit[0+seed],
+        'n2':tit[1+seed], 'n3':tit[2+seed],'h1':href[0+seed], 'h2':href[1+seed], 'h3':href[2+seed],
+        'd1':desc[0+seed], 'd2':desc[1+seed], 'd3':desc[2+seed],
+        'img1':img[0+seed], 'img2':img[1+seed], 'img3':img[2+seed]})
     else:
         msg = "You are not logged in currently."
         return render(request, 'main/home.html', {'msg': msg})
@@ -202,33 +229,3 @@ def search(request):
 
         else:
             return render(request, 'main/search.html', {'identity': identity, 'form': form})
-# def search(request):
-#     if request.user.is_anonymous or request.user.is_superuser:
-#         return render(request, 'main/search.html')
-#
-#     identity = Identity.objects.get(user=request.user).identity
-#     if identity == 'student':
-#         return render(request, 'main/search.html', {'identity': identity})
-#     else:
-#         form = SearchForm()
-#         if request.method == 'GET':
-#             studentProfiles = StudentProfile.objects.all()
-#             nameContain = request.GET.get('nameContain')
-#             departmentIs = request.GET.get('departmentIs')
-#             maxGPA = request.GET.get('maxGPA')
-#             minGPA = request.GET.get('minGPA')
-#             if nameContain != '' and nameContain is not None:
-#                 studentProfiles = studentProfiles.filter(name__icontains=nameContain)
-#             if departmentIs != '' and departmentIs is not None:
-#                 studentProfiles = studentProfiles.filter(department__exact=departmentIs)
-#             if maxGPA != '' and maxGPA is not None:
-#                 studentProfiles = studentProfiles.filter(gpa__lte=maxGPA)
-#             if minGPA != '' and minGPA is not None:
-#                 studentProfiles = studentProfiles.filter(gpa__gte=minGPA)
-#
-#             form = SearchForm(initial={'nameContain': nameContain, 'departmentIs': departmentIs, 'maxGPA': maxGPA,
-#                                        'minGPA': minGPA})
-#             return render(request, 'main/search.html', {'identity': identity, 'form': form, 'results': studentProfiles})
-#
-#         else:
-#             return render(request, 'main/search.html', {'identity': identity, 'form': form})

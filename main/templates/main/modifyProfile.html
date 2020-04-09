@@ -28,7 +28,7 @@
         <p>You are logged in as a superuser.</p>
         <p>Log out <a href="/logout/">here</a>.</p>
     {% else %}
-        <p>{{ msg }}</p>
+        <p2>{{ msg }}</p2>
         <form method="post" action="#">
         {% csrf_token %}
         {{ form|crispy }}

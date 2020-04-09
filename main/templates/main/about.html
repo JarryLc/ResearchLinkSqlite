@@ -55,7 +55,9 @@
               research, thereby helping them to develop insightful perspectives on their areas
               of interest and advance the frontiers of knowledge.
 						</p>
+            {% if not user.is_authenticated %}
 					<a href="/profile/create" class="btn">Learn More and Create an Account!</a>
+          {%endif%}
 				</div>
 			</div>
 		</div>

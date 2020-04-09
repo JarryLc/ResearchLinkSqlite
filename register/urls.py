@@ -4,5 +4,5 @@ from . import views
 
 urlpatterns = [
     path('', views.register, name='register'),
-    # path('react/', views.react, name='react'),
+    path('react/', views.react, name='react'),
 ]

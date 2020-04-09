@@ -11,3 +11,5 @@ djangorestframework
 django-rest-framework-mongoengine
 django-filter
 markdown
+django-rest-auth
+django-allauth

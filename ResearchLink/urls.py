@@ -28,4 +28,8 @@ urlpatterns = [
 
     path('api/register/', include('register.api.urls')),
     path('api/main/', include('main.api.urls')),
+
+    path('rest-auth/', include('rest_auth.urls')),
+    path('rest-auth/', include('rest_auth.urls')),
+    path('rest-auth/registration/', include('rest_auth.registration.urls')),
 ]

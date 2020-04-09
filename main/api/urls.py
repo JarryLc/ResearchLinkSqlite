@@ -4,7 +4,9 @@ from .views import (StudentProfileListView,
                     StudentTagsListView,
                     ProfessorTagsListView,
                     MatchesListView,
-                    StudentCreateView)
+                    StudentCreateView,
+                    DepartmentListView,
+                    GetUsernameView)
 from django.views.decorators.csrf import csrf_exempt
 
 urlpatterns = [
@@ -16,4 +18,8 @@ urlpatterns = [
     # path('<pk>', IdentityDetailView.as_view(), name='IdentityDetailView'),
 
     path('StudentProfile/create/', csrf_exempt(StudentCreateView)),
+
+
+    path('departmentList/', DepartmentListView),
+    path('getUsername/', GetUsernameView),
 ]

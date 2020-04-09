@@ -21,6 +21,61 @@
 
 
 {% block content %}
+<style>
+.X{
+  margin: auto;
+  padding: 1% 2%;
+  max-width: 1440px;
+  border-radius: 5px;
+  background: #ecf0f1;
+  box-shadow: 0 2px 6px 0 rgba(0,0,0, .3);
+}
+
+li{
+  color: #2c3e50;
+  font-size: 18px;
+  line-height: 30px;
+  text-align: justify;
+  letter-spacing: 1px;
+  font-family: 'Raleway', serif;
+}
+
+.SG{
+  margin: 0;
+  padding: 0;
+  text-align: center;
+}
+.SG .sgLi{
+  min-width: 24%;
+  margin: 2% .35%;
+  display: inline-flex;
+  box-shadow: 0 2px 4px rgba(0,0,0, .2);
+}
+.SG .sgLi:hover{
+  box-shadow:0 5px 10px rgba(0,0,0,.15);}
+
+.SG .box{
+  width: 100%;
+  height: 100vh;
+  padding: 1% 2%;
+  background: #fff;
+  min-height: 200px;
+  max-height: 220px;
+  box-sizing: border-box;
+}
+
+/*Styles */
+.df{list-style-type: disc;}
+.s1{list-style-type: square;}
+
+
+/* responsive grid*/
+@media (max-width: 970px){
+  .SG .sgLi{width: 180px;}}
+@media (max-width: 425px){
+  .SG .sgLi{width: 100%;}
+}
+</style>
     {% if not user.is_authenticated %}
         <p>You are not logged in currently.</p>
         <p> <a href="/login/" class = "bttn">Log In</a> <a href="/register/" class = "bttn">Create Account</a></p>
@@ -35,20 +90,25 @@
         {{ form|crispy }}
         <button type="submit">Search</button>
         </form>
-        <hr />
-        <div class="row">
-            <ul>
-                {% for profile in results %}
-                    <li>
-                        <span>NetId: {{ profile.netid }}</span>
-                        <span>Name: {{ profile.name }}</span>
-                        <span>GPA: {{ profile.gpa }}</span>
-                        <span>Department: {{ profile.department }}</span>
-                    </li>
-                    <hr />
-                {% endfor %}
-            </ul>
-        </div>
+
+        <div class="X">
+<h1>Qualified Student(s): </h1>
+
+<ul class="SG">
+  {% for profile in results %}
+  <li class="sgLi">
+    <div class="box">
+   <h3>{{ profile.name }}</h3>
+   <ol class="s1">
+    <li>{{profile.netid}}</li>
+    <li>GPA: {{ profile.gpa }}</li>
+    <li>Department: {{ profile.department }}</li>
+   </ol>
+  </div>
+ </li>
+ {% endfor %}
+</ul>
+</div>
 
 
 

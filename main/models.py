@@ -5,9 +5,13 @@ from mongoengine import Document, EmbeddedDocument, fields, DynamicDocument
 
 # Create your models here.
 
+class Identity(models.Model):
+    netid = models.CharField(max_length=20, primary_key=True)
+    identity = models.CharField(max_length=20)
+
 
 class StudentProfile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    # user = models.OneToOneField(User, on_delete=models.CASCADE)
     netid = models.CharField(max_length=20, primary_key=True)
     name = models.CharField(max_length=50)
     gpa = models.DecimalField(max_digits=3, decimal_places=2)
@@ -15,7 +19,7 @@ class StudentProfile(models.Model):
 
 
 class ProfessorProfile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    # user = models.OneToOneField(User, on_delete=models.CASCADE)
     netid = models.CharField(max_length=20, primary_key=True)
     name = models.CharField(max_length=50)
     department = models.CharField(max_length=50)

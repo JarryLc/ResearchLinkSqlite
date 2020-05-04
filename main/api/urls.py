@@ -13,7 +13,10 @@ from .views import (StudentProfileListView,
                     StudentProfileSearch,
                     ProfessorProfileSearch,
                     statistics,
-                    RecommendationView)
+                    RecommendationView,
+                    createProfessorUser,
+                    createStudentUser,
+                    createRealStudentUser)
 from django.views.decorators.csrf import csrf_exempt
 
 urlpatterns = [
@@ -40,5 +43,9 @@ urlpatterns = [
     path('getProfile/', GetProfileView),
     path('statistics/', statistics),
     path('recommendation/', RecommendationView),
+
+    path('support/professor/', createProfessorUser),
+    path('support/randomStudent/', createStudentUser),
+    path('support/realStudent/', createRealStudentUser),
 
 ]

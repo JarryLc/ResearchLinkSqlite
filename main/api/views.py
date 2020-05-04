@@ -1,3 +1,6 @@
+import random
+import string
+
 from rest_framework.generics import ListAPIView, RetrieveAPIView, CreateAPIView
 from django.views import View
 from django.http import HttpResponse, JsonResponse
@@ -10,6 +13,7 @@ from rest_framework.authtoken.models import Token
 import copy
 from django.db import connection
 from django.contrib.auth.models import User
+import requests
 
 departmentChoicesWithoutEmpty = {'departmentList': ['',
                                                     'Electrical & Computer Engineering',
@@ -17,6 +21,104 @@ departmentChoicesWithoutEmpty = {'departmentList': ['',
                                                     'Mechanical Engineering',
                                                     'Chemical Engineering',
                                                     ]}
+
+professorsProfile = [
+    # ['A. Alawini', 'alawini@illinois.edu', 'Computer Science', ['Computers and Education', 'Data and Information Systems']],
+    # ['A. Bates', 'batesa@illinois.edu', 'Computer Science', ['Operating Systems', 'Security and Privacy']],
+    # ['M. Fleck', 'mfleck@illinois.edu', 'Computer Science', ['Artificial Intelligence']],
+    # ['Deming Chen', 'dchen@illinois.edu', 'Electrical & Computer Engineering', ['GPU optimization', 'IoT', 'FPGA']],
+    # ['Wen-mei Hwu', 'w-hwu@illinois.edu', 'Electrical & Computer Engineering', ['Compilers', 'Cloud computing']],
+    # ['Armand Joseph Beaudoin', 'beaudoin@illinois.edu', 'Mechanical Engineering', ['Solid Mechanics and Materials']],
+    # ['Pramod Viswanath', 'pramodv@illinois.edu', 'Electrical & Computer Engineering', ['Blockchain', 'Networks']],
+    # ['Vikram Adve', 'vadve@illinois.edu', 'Computer Science', ['Architecture', 'Compilers', 'Parallel Computing']],
+    # ['Saurabh Gupta', 'saurabhg@illinois.edu', 'Electrical & Computer Engineering', ['Robotics', 'CV']],
+    # ['Brian P Bailey', 'bpbailey@illinois.edu', 'Computer Science', ['Interactive Computing']],
+    # ['Mattia Gazzola', 'mgazzola@illinois.edu', 'Mechanical Engineering', ['computational soft robotics']],
+    # ['M Quinn Brewster', 'brewster@illinois.edu', 'Mechanical Engineering', ['Fluid Mechanics']],
+    # ['Paul Fischer', 'fischerp@illinois.edu', 'Computer Science', ['Scientific Computing']],
+]
+defaultPassword = '123456'
+
+
+studentTags = ['Computer science', 'Electrical engineering', 'CV', 'ML', 'NLP', 'Database', 'Computer Architecture', 'AI']
+
+
+
+RealStudentUser = [
+    # ['Sid Kumar', 'sk22', 'sk22@illinois.edu', 3.6, 1, ["ML", "Communication Systems", "Distributed Systems", "Systems", "Computer Architecture"]],
+    # ['Gaurav', 'gvs2', 'gvs2@illinois.edu', 3.81, 2, ["ML", "AI"]],
+    # ['Sankruth Kota', 'srkota2', 'srkota2@illinois.edu', 3.5, 1, ["ML", "Distributed Systems", "Computer Architecture"]],
+    # ['Tak Sum Chan', 'taksumc2', 'taksumc2@illinois.edu', 4.0, 2, ["ML", "Algorithms", "Database"]],
+    # ['Josh Perakis', 'perakis2', 'perakis2@illinois.edu', 3.3, 2, ["Cyber security", "Cloud computing"]],
+    # ['Jacob Perakis', 'jacobvp2', 'jacobvp2@illinois.edu', 3.63, 2, ["ML", "AI"]],
+    # ['Yifan Yang', 'yifany2', 'yifany2@illinois.edu', 3.9, 3, ["Control", "Math"]],
+    # ['Tianchi Lu', 'tianchi3', 'tianchi3@illinois.edu', 3.98, 1, ["NLP", "AI"]],
+    # ['Shail Desai', 'shailrd2', 'shailrd2@illinois.edu', 2.54, 2, ["ML", "AI", "Big data"]],
+    # ['Jiayi Cai', 'jiayic7', 'jiayic7@illinois.edu', 4.0, 1, ["Cloud computing"]],
+    # ['Yaxin Peng', 'yaxinp2', 'yaxinp2@illinois.edu', 4.0, 1, ["ML", "Software development"]],
+]
+
+
+def createProfessorUser(request):
+    for professor in professorsProfile:
+        name = professor[0]
+        email = professor[1]
+        netid = professor[1].split("@")[0]
+        department = professor[2]
+        tags = professor[3]
+        User.objects.create_user(netid, email, defaultPassword)
+        i = Identity(netid=netid, identity='professor')
+        i.save()
+        p = ProfessorProfile(netid=netid, name=name, department=department)
+        p.save()
+        t = ProfessorTags(netid=netid, tags=tags)
+        t.save()
+        print("create for professor " + name)
+
+    return HttpResponse('')
+
+
+def createStudentUser(request):
+    num = 5
+    for i in range(num):
+        r = requests.get(url='https://randomuser.me/api/')
+        data = r.json()
+        name = data['results'][0]['name']['first'] + ' ' + data['results'][0]['name']['last']
+        email = data['results'][0]['name']['first'].lower() + str(random.randint(2, 10)) + "@illinois.edu"
+        netid = data['results'][0]['name']['first'].lower()
+        department = departmentChoicesWithoutEmpty['departmentList'][random.randint(1, 3)]
+        tags = [studentTags[random.randint(0, len(studentTags) - 1)]]
+        gpa = round(float((random.randint(320, 400))/100), 2)
+        User.objects.create_user(netid, email, defaultPassword)
+        i = Identity(netid=netid, identity='student')
+        i.save()
+        p = StudentProfile(netid=netid, name=name, gpa=gpa, department=department)
+        p.save()
+        t = StudentTags(netid=netid, tags=tags)
+        t.save()
+        print("create for student " + name)
+    return HttpResponse('')
+
+
+def createRealStudentUser(request):
+    for s in RealStudentUser:
+        name = s[0]
+        netid = s[1]
+        email = s[2]
+        gpa = s[3]
+        department = departmentChoicesWithoutEmpty['departmentList'][s[4]]
+        tags = s[5]
+        User.objects.create_user(netid, email, defaultPassword)
+        i = Identity(netid=netid, identity='student')
+        i.save()
+        p = StudentProfile(netid=netid, name=name, gpa=gpa, department=department)
+        p.save()
+        t = StudentTags(netid=netid, tags=tags)
+        t.save()
+        print("create for student " + name)
+    return HttpResponse('')
+
+
 
 
 def loginStatus(token):
@@ -286,6 +388,7 @@ def StudentProfileSearch(request):
         nameContain = ''
         departmentIs = ''
         minGPA = ''
+        tagContain = ''
         try:
             nameContain = body['nameContain']
         except(KeyError):
@@ -298,6 +401,11 @@ def StudentProfileSearch(request):
             minGPA = body['minGPA']
         except(KeyError):
             pass
+        try:
+            tagContain = body['tagContain']
+        except(KeyError):
+            pass
+        # print(tagContain)
         rawQuery = "SELECT * FROM main_studentprofile WHERE 1=1 "
 
         # print("search: ", nameContain, departmentIs, minGPA)
@@ -313,6 +421,12 @@ def StudentProfileSearch(request):
         # print(studentProfiles)
         responseList = []
         for p in studentProfiles:
+            try:
+                st = StudentTags.objects(netid=p.netid)
+                if tagContain not in st[0]["tags"] and tagContain != '':
+                    continue
+            except:
+                continue
             dic = {
                 "netid": p.netid,
                 "name": p.name,
@@ -331,12 +445,17 @@ def ProfessorProfileSearch(request):
         # print(body)
         nameContain = ''
         departmentIs = ''
+        tagContain = ''
         try:
             nameContain = body['nameContain']
         except(KeyError):
             pass
         try:
             departmentIs = body['departmentIs']
+        except(KeyError):
+            pass
+        try:
+            tagContain = body['tagContain']
         except(KeyError):
             pass
         rawQuery = "SELECT * FROM main_professorprofile WHERE 1=1 "
@@ -351,6 +470,12 @@ def ProfessorProfileSearch(request):
         # print(studentProfiles)
         responseList = []
         for p in professorProfiles:
+            try:
+                pt = ProfessorTags.objects(netid=p.netid)
+                if tagContain not in pt[0]["tags"] and tagContain != '':
+                    continue
+            except:
+                continue
             dic = {
                 "netid": p.netid,
                 "name": p.name,
@@ -364,6 +489,18 @@ def ProfessorProfileSearch(request):
 
 def recommendation():
     with connection.cursor() as cursor:
+        cursor.execute("SELECT department, AVG(gpa) FROM main_studentprofile GROUP BY department")
+        row = cursor.fetchone()
+        stat = {}
+        while row:
+            department = row[0]
+            avg = row[1]
+            stat[department] = round(avg, 3)
+            row = cursor.fetchone()
+
+
+
+    with connection.cursor() as cursor:
         cursor.execute(
             "SELECT * FROM main_studentprofile AS s JOIN main_professorprofile AS p ON s.department=p.department")
         matches = {}
@@ -371,7 +508,15 @@ def recommendation():
         while row:
             # print(row)
             student = row[0]
+            gpa = row[2]
+            department = row[3]
             professor = row[4]
+
+            if gpa < stat[department]:
+                print(student, "gpa is lower than average")
+                row = cursor.fetchone()
+                continue
+
             if student not in matches.keys():
                 matches[student] = [professor]
             else:
@@ -426,7 +571,7 @@ def statistics(request):
                 department = row[0]
                 avg = row[1]
                 subDict['department'] = department
-                subDict['avg'] = avg
+                subDict['avg'] = round(avg, 3)
                 stat.append(subDict)
                 row = cursor.fetchone()
             response = json.dumps(stat)
